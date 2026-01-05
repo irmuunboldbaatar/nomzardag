@@ -52,13 +52,13 @@ body {
 .book-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 2rem;
+    gap: 1rem;
     padding-bottom: 5rem;
 }
 
 /* Book Cards */
 .book-card {
-    height: 500px;
+    height: 450px;
     background: var(--card-bg);
     border-radius: 12px;
     overflow: hidden;

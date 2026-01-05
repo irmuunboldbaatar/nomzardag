@@ -1,9 +1,9 @@
 // 1. Data Source
 const books = [
-    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45000, grade: "10-р анги", subject: "Иргэний боловсрол", code: "ECON101", year: "2010", image: "img/principles-of-economics.jpeg" },
-    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80000, grade: "12-р анги", subject: "Хими", code: "BIO202", year: "1999", image: "img/organic-chemistry.jpg" },
-    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60000, grade: "11-р анги", subject: "Математик", code: "MATH150", year: "2020", image: "img/calculus-early-transcendentals.jpg" },
-    { id: 4, title: "The Great Gatsby", author: "Fitzgerald", price: 10000, grade: "10-р анги", subject: "Уран зохиол", code: "LIT300", year: "2024", image: "img/the-great-gatsby.webp" }
+    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45000, grade: "10-р анги", subject: "Иргэний боловсрол", year: "2010", image: "img/principles-of-economics.jpeg" },
+    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80000, grade: "12-р анги", subject: "Хими", year: "1999", image: "img/organic-chemistry.jpg" },
+    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60000, grade: "11-р анги", subject: "Математик", year: "2020", image: "img/calculus-early-transcendentals.jpg" },
+    { id: 4, title: "The Great Gatsby", author: "Fitzgerald", price: 10000, grade: "10-р анги", subject: "Уран зохиол", year: "2024", image: "img/the-great-gatsby.webp" }
 ];
 
 let recentlyViewed = [];
@@ -27,7 +27,6 @@ function displayBooks(filteredBooks) {
         const card = `
         <a href="product.html?id=${book.id}" class="book-card-link">
             <div class="book-card">
-                <div class="badge">${book.code}</div>
                 <div class="book-image"><img src="${book.image}" alt="${book.title}"></div>
                 <div class="book-info">
                     <div class="price-row">
@@ -35,7 +34,7 @@ function displayBooks(filteredBooks) {
                     </div>
                     <h3>${book.title}</h3>
                     <p class="meta">${book.grade} | ${book.subject}</p>
-                    <p class="year">Хэвлэгдсэн: <span>${book.year}</span></p>
+                    <p class="year">Хэвлэгдсэн: <span>${book.year} он</span></p>
                 </div>
             </div>
         </a>
