@@ -11,19 +11,22 @@ window.addNewBook = addNewBook;
 async function loadBooksFromDatabase() {
     try {
         const querySnapshot = await getDocs(collection(db, "books"));
-        // Clear the array and fill it with fresh data
-        allBooks = [];
+        
+        // ADD THIS LINE:
+        const booksArray = []; 
+        
         querySnapshot.forEach((doc) => {
-            allBooks.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            console.log("Document ID:", doc.id, "Data:", data);
+            booksArray.push({ id: doc.id, ...data });
         });
         
-        console.log("Books loaded from Firebase:", allBooks); // Check your console for this!
+        // Update your global allBooks and display them
+        allBooks = booksArray;
+        displayBooks(allBooks);
         
-        // 2. Immediately call display with the full list
-        displayBooks(allBooks); 
     } catch (error) {
         console.error("Error fetching books:", error);
-        bookGrid.innerHTML = `<p class="no-results">Error connecting to database.</p>`;
     }
 }
 
@@ -44,26 +47,26 @@ function displayBooks(filteredBooks) {
         return;
     }
 
+    // script.js
+
     filteredBooks.forEach(book => {
-        // Add || "..." to handle any missing data gracefully
-        const title = book.title || "Гарчиггүй";
-        const price = book.price || -404;
-        const grade = book.grade || "Хоосон";
-        const subject = book.subject || "Хоосон";
-        const year = book.year || "----";
-        const image = book.image || "img/no-img.png";
+        // Format the price with commas and the currency symbol
+        const formattedPrice = Number(book.price).toLocaleString();
 
         const card = `
         <a href="product.html?id=${book.id}" class="book-card-link">
             <div class="book-card">
-                <div class="book-image"><img src="${image}" alt="${title}"></div>
+                <div class="book-image"><img src="${book.image}" alt="${book.title}"></div>
                 <div class="book-info">
                     <div class="price-row">
-                        <span class="price">₮${price.toLocaleString()}</span>
+                        <span class="price">₮${formattedPrice}</span>
                     </div>
-                    <h3>${title}</h3>
-                    <p class="meta">${grade} | ${subject}</p>
-                    <p class="year">Хэвлэгдсэн: <span>${year}он</span></p>
+                    
+                    <h3>${book.title}</h3>
+                    
+                    <p class="meta">${book.grade} | ${book.subject}</p>
+                    
+                    <p class="year">Хэвлэгдсэн: <span>${book.year} он</span></p>
                 </div>
             </div>
         </a>
@@ -190,10 +193,15 @@ async function addNewBook(event) {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             
             // Save to Firestore exactly like before
+            // Inside addNewBook, make sure you include ALL of these:
             await addDoc(collection(db, "books"), {
                 title: document.getElementById('formTitle').value,
+                author: document.getElementById('formAuthor').value,
+                price: Number(document.getElementById('formPrice').value),
+                grade: document.getElementById('formGrade').value,
+                subject: document.getElementById('formSubject').value,
+                year: document.getElementById('formYear').value, // This was missing in your screenshot!
                 image: downloadURL,
-                // ... include all your other form fields here ...
                 createdAt: new Date()
             });
 

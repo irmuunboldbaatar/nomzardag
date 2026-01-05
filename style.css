@@ -51,24 +51,10 @@ body {
 
 .book-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 0.8rem;
-    padding-bottom: 5rem;
+    /* This ensures columns are equal width */
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+    gap: 0.5rem;
 }
-
-/* Book Cards */
-.book-card {
-    height: 450px;
-    background: var(--card-bg);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-    position: relative;
-    transition: transform 0.2s;
-}
-
-.book-card:hover { transform: translateY(-5px); }
-
 .badge {
     position: absolute;
     top: 10px;
@@ -81,30 +67,65 @@ body {
     font-weight: bold;
 }
 
+/* Book Cards */
+
+.book-card:hover { transform: translateY(-5px); }
+
+/* Fix the container to be consistent */
 .book-image {
-    height: 250px;
-    background-color: #ddd; 
+    /* Fixes the image container size */
+    height: 220px; 
+    width: 100%;
+    background-color: #f1f5f9;
+    overflow: hidden;
+    flex-shrink: 0; /* Prevents the image from squishing */
 }
 
-/* Style for the cards in the grid */
+/* Ensure the image fills the 220px perfectly */
 .book-image img {
     width: 100%;
-    height: 200px; /* Fixed height for the grid */
-    object-fit: cover; /* Crops the photo to fit the box perfectly */
+    height: 100%;
+    /* 'cover' fills the box; 'center' prevents the upward shift */
+    object-fit: cover;
+    object-position: center; 
     display: block;
 }
 
-.book-info { padding: 0.8rem; }
-.book-info h3 { margin: 0; font-size: 1.1rem; }
+.book-card {
+    height: 400px; /* Fixed height for uniformity */
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.book-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Adds consistent spacing between elements */
+}
+
+.book-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    /* Keeps titles to 2 lines to maintain uniform card height */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.4rem; 
+}
+
 .author { font-size: 0.9rem; color: #64748b; margin: 5px 0; }
 .condition { font-size: 0.85rem; margin: 10px 0; }
 .condition span { font-weight: bold; color: #059669; }
 
 .price-row {
-    margin-bottom: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin-bottom: 4px; /* Space between price and title */
 }
 
 .price { font-size: 1.2rem; font-weight: 700; color: var(--primary); }

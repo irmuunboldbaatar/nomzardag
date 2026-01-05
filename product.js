@@ -19,9 +19,9 @@ async function loadProductDetails() {
                     <img src="${book.image}" style="height:400px; object-fit: contain;">
                 </div>
                 <div class="product-specs">
-                    <h1>${book.title}</h1>
+                    <h1>${book.title || "Мэдээлэлгүй"}</h1>
                     <p class="author">Зохиогч: ${book.author || 'Тодорхойгүй'}</p>
-                    <div class="price-tag">₮${book.price}</div>
+                    <div class="price-tag">${book.price || 0}₮</div>
                     <div class="detail-grid">
                         <div class="spec-item"><strong>Анги:</strong> ${book.grade}</div>
                         <div class="spec-item"><strong>Хичээл:</strong> ${book.subject}</div>
