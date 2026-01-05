@@ -8,26 +8,24 @@
     <script src="script.js" defer></script>
   </head>
   <body>
-    <nav class="navbar">
-      <div class="logo" onclick="showHome()" style="cursor: pointer">
-        Nom<span>Zardag</span>
-      </div>
-      <div class="search-bar">
-        <input type="text" placeholder="Search by Course Code or Title..." />
-      </div>
-      <button
-        class="sell-btn"
-        onclick="document.getElementById('sellModal').classList.remove('hidden')"
-      >
-        + Зар нэмэх
-      </button>
-    </nav>
-
+    <header class="hero">
+      <nav class="navbar">
+        <div class="logo" onclick="showHome()" style="cursor: pointer">
+          Nom<span>Zardag</span>
+        </div>
+        <div class="search-bar">
+          <input type="text" placeholder="Search by Course Code or Title..." />
+        </div>
+        <button
+          class="sell-btn"
+          onclick="document.getElementById('sellModal').classList.remove('hidden')"
+        >
+          + Зар нэмэх
+        </button>
+      </nav>
+    </header>
     <main class="container">
-      <header class="hero">
-        <h1>Хуучин сурах бичиг.</h1>
-        <p>Find your textbooks for the next semester at half the price.</p>
-      </header>
+      
 
       <div id="sellModal" class="modal-overlay hidden">
         <div class="modal-content">
