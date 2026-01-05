@@ -43,7 +43,7 @@ body {
 }
 
 /* Hero Section */
-.hero { text-align: center; padding: 3rem 0; }
+.hero { text-align: center; padding: 0rem 0; }
 .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
 
 /* Grid Layout */
@@ -95,17 +95,17 @@ body {
     object-position: center; 
 }
 
-.book-info { padding: 1.2rem; }
+.book-info { padding: 0.8rem; }
 .book-info h3 { margin: 0; font-size: 1.1rem; }
 .author { font-size: 0.9rem; color: #64748b; margin: 5px 0; }
 .condition { font-size: 0.85rem; margin: 10px 0; }
 .condition span { font-weight: bold; color: #059669; }
 
 .price-row {
+    margin-bottom: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 15px;
 }
 
 .price { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
@@ -122,7 +122,7 @@ body {
 
 .filter-section {
     background: #fff;
-    padding: 1rem 0;
+    padding: 1rem;
     border-bottom: 1px solid #e2e8f0;
     margin-bottom: 2rem;
 }

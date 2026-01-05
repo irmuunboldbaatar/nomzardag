@@ -1,9 +1,9 @@
 // 1. Data Source
 const books = [
-    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45, grade: "10-р анги", subject: "Иргэний боловсрол", code: "ECON101", condition: "Good", image: "img/Alfred_Marshall_-_Principles_of_Economics_(1890).jpeg" },
-    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80, grade: "Sophomore", subject: "Хими", code: "BIO202", condition: "Like New", image: "https://via.placeholder.com/150" },
-    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60, grade: "10-р анги", subject: "Math", code: "MATH150", condition: "Fair", image: "https://via.placeholder.com/150" },
-    { id: 4, title: "The Great Gatsby", author: "Fitzgerald", price: 10, grade: "Junior", subject: "Literature", code: "LIT300", condition: "Excellent", image: "https://via.placeholder.com/150" }
+    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45000, grade: "10-р анги", subject: "Иргэний боловсрол", code: "ECON101", condition: "Good", image: "img/Alfred_Marshall_-_Principles_of_Economics_(1890).jpeg" },
+    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80000, grade: "Sophomore", subject: "Хими", code: "BIO202", condition: "Like New", image: "https://via.placeholder.com/150" },
+    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60000, grade: "10-р анги", subject: "Math", code: "MATH150", condition: "Fair", image: "https://via.placeholder.com/150" },
+    { id: 4, title: "The Great Gatsby", author: "Fitzgerald", price: 10000, grade: "Junior", subject: "Literature", code: "LIT300", condition: "Excellent", image: "https://via.placeholder.com/150" }
 ];
 
 let recentlyViewed = [];
