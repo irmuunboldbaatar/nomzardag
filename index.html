@@ -26,7 +26,6 @@
       </nav>
     </header>
     <main class="container">
-      
       <div id="sellModal" class="modal-overlay hidden">
         <div class="modal-content">
           <h2>Номны мэдээлэл оруулах</h2>
@@ -37,13 +36,8 @@
               placeholder="Номын нэр"
               required
             />
-            <input type="text" id="formAuthor" placeholder="Зохиогч"/>
-            <input
-              type="number"
-              id="formPrice"
-              placeholder="Үнэ ₮"
-              required
-            />
+            <input type="text" id="formAuthor" placeholder="Зохиогч" />
+            <input type="number" id="formPrice" placeholder="Үнэ ₮" required />
 
             <div class="select-group">
               <select id="formGrade">
@@ -82,18 +76,63 @@
               />
               <div class="form-group">
                 <label for="formImage">Номны зураг:</label>
-                <input type="file" id="formImage" accept="image/*" onchange="previewFile()">
-                <img id="previewImg" src="" style="display:none; width:100px; margin-top:10px; border-radius:8px;">
+                <input
+                  type="file"
+                  id="formImage"
+                  accept="image/*"
+                  onchange="previewFile()"
+                />
+                <img
+                  id="previewImg"
+                  src=""
+                  style="
+                    display: none;
+                    width: 100px;
+                    margin-top: 10px;
+                    border-radius: 8px;
+                  "
+                />
               </div>
               <div id="imagePreview" class="hidden">
-                <img id="previewImg" src="" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">
+                <img
+                  id="previewImg"
+                  src=""
+                  style="
+                    width: 100px;
+                    height: 100px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                  "
+                />
               </div>
             </div>
 
-            <div id="uploadContainer" class="hidden" style="margin: 15px 0;">
-              <p id="uploadStatus" style="font-size: 0.8rem; margin-bottom: 5px;">Uploading: 0%</p>
-              <div class="progress-bar-bg" style="width: 100%; background: #e2e8f0; height: 10px; border-radius: 5px;">
-                <div id="progressBar" style="width: 0%; background: #4f46e5; height: 100%; border-radius: 5px; transition: width 0.3s;"></div>
+            <div id="uploadContainer" class="hidden" style="margin: 15px 0">
+              <p
+                id="uploadStatus"
+                style="font-size: 0.8rem; margin-bottom: 5px"
+              >
+                Uploading: 0%
+              </p>
+              <div
+                class="progress-bar-bg"
+                style="
+                  width: 100%;
+                  background: #e2e8f0;
+                  height: 10px;
+                  border-radius: 5px;
+                "
+              >
+                <div
+                  id="progressBar"
+                  style="
+                    width: 0%;
+                    background: #4f46e5;
+                    height: 100%;
+                    border-radius: 5px;
+                    transition: width 0.3s;
+                  "
+                ></div>
               </div>
             </div>
 

@@ -71,37 +71,6 @@ function displayBooks(filteredBooks) {
     });
 }
 
-// 4. Detail View Logic
-function openBook(id) {
-    const book = books.find(b => b.id === id);
-    if (!book) return;
-
-    // Toggle Visibility
-    document.querySelector('.hero').classList.add('hidden');
-    document.querySelector('.filter-section').classList.add('hidden');
-    document.getElementById('bookGrid').classList.add('hidden');
-    document.getElementById('detailPage').classList.remove('hidden');
-
-    // Populate Detail Content
-    document.getElementById('detailTitle').innerText = book.title;
-    document.getElementById('detailAuthor').innerText = "By " + book.author;
-    document.getElementById('detailPrice').innerText = "$" + book.price;
-    document.getElementById('detailCode').innerText = book.code;
-    document.getElementById('detailGrade').innerText = book.grade;
-    document.getElementById('detailYear').innerText = book.year;
-    document.getElementById('detailImg').innerHTML = `<img src="${book.image}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`;
-
-    // History Tracking
-    if (!recentlyViewed.some(b => b.id === book.id)) {
-        recentlyViewed.unshift(book);
-        if (recentlyViewed.length > 5) recentlyViewed.pop();
-    }
-
-    renderSuggested(book.subject, book.id);
-    renderHistory();
-    window.scrollTo(0, 0);
-}
-
 // 5. Sidebar/Bottom List Rendering
 function renderSuggested(subject, currentId) {
     const suggested = books.filter(b => b.subject === subject && b.id !== currentId);
