@@ -1,9 +1,9 @@
 // 1. Data Source
 const books = [
-    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45000, grade: "10-р анги", subject: "Иргэний боловсрол", code: "ECON101", condition: "Good", image: "img/Alfred_Marshall_-_Principles_of_Economics_(1890).jpeg" },
-    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80000, grade: "Sophomore", subject: "Хими", code: "BIO202", condition: "Like New", image: "https://via.placeholder.com/150" },
-    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60000, grade: "10-р анги", subject: "Math", code: "MATH150", condition: "Fair", image: "https://via.placeholder.com/150" },
-    { id: 4, title: "The Great Gatsby", author: "Fitzgerald", price: 10000, grade: "Junior", subject: "Literature", code: "LIT300", condition: "Excellent", image: "https://via.placeholder.com/150" }
+    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45000, grade: "10-р анги", subject: "Иргэний боловсрол", code: "ECON101", year: "2010", image: "img/principles-of-economics.jpeg" },
+    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80000, grade: "12-р анги", subject: "Хими", code: "BIO202", year: "1999", image: "img/organic-chemistry.jpg" },
+    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60000, grade: "11-р анги", subject: "Математик", code: "MATH150", year: "2020", image: "img/calculus-early-transcendentals.jpg" },
+    { id: 4, title: "The Great Gatsby", author: "Fitzgerald", price: 10000, grade: "10-р анги", subject: "Уран зохиол", code: "LIT300", year: "2024", image: "img/the-great-gatsby.webp" }
 ];
 
 let recentlyViewed = [];
@@ -16,8 +16,8 @@ const subjectFilter = document.getElementById('subjectFilter');
 
 // 3. Main Display Function
 function displayBooks(filteredBooks) {
-    bookGrid.innerHTML = ''; 
-    
+    bookGrid.innerHTML = '';
+
     if (filteredBooks.length === 0) {
         bookGrid.innerHTML = `<p class="no-results">No books found for your criteria.</p>`;
         return;
@@ -25,7 +25,8 @@ function displayBooks(filteredBooks) {
 
     filteredBooks.forEach(book => {
         const card = `
-            <div class="book-card" onclick="openBook(${book.id})">
+        <a href="product.html?id=${book.id}" class="book-card-link">
+            <div class="book-card">
                 <div class="badge">${book.code}</div>
                 <div class="book-image"><img src="${book.image}" alt="${book.title}"></div>
                 <div class="book-info">
@@ -34,10 +35,10 @@ function displayBooks(filteredBooks) {
                     </div>
                     <h3>${book.title}</h3>
                     <p class="meta">${book.grade} | ${book.subject}</p>
-                    <p class="condition">Condition: <span>${book.condition}</span></p>
-                    <button class="buy-btn">View Details</button>
+                    <p class="year">Хэвлэгдсэн: <span>${book.year}</span></p>
                 </div>
             </div>
+        </a>
         `;
         bookGrid.innerHTML += card;
     });
@@ -60,7 +61,7 @@ function openBook(id) {
     document.getElementById('detailPrice').innerText = "$" + book.price;
     document.getElementById('detailCode').innerText = book.code;
     document.getElementById('detailGrade').innerText = book.grade;
-    document.getElementById('detailCondition').innerText = book.condition;
+    document.getElementById('detailYear').innerText = book.year;
     document.getElementById('detailImg').innerHTML = `<img src="${book.image}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`;
 
     // History Tracking
@@ -121,7 +122,7 @@ function applyFilters() {
 // 7. Sell Form Logic
 function addNewBook(event) {
     event.preventDefault(); // Stop page refresh
-    
+
     const newBook = {
         id: books.length + 1,
         title: document.getElementById('formTitle').value,
@@ -130,7 +131,7 @@ function addNewBook(event) {
         grade: document.getElementById('formGrade').value,
         subject: document.getElementById('formSubject').value,
         code: document.getElementById('formCode').value,
-        condition: document.getElementById('formCondition').value,
+        year: document.getElementById('formYear').value,
         image: "https://via.placeholder.com/150" // Default placeholder
     };
 
