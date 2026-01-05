@@ -1,10 +1,31 @@
 // 1. Data Source
-const books = [
-    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45000, grade: "10-р анги", subject: "Иргэний боловсрол", year: "2010", image: "img/principles-of-economics.jpeg" },
-    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80000, grade: "12-р анги", subject: "Хими", year: "1999", image: "img/organic-chemistry.jpg" },
-    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60000, grade: "11-р анги", subject: "Математик", year: "2020", image: "img/calculus-early-transcendentals.jpg" },
-    { id: 4, title: "The Great Gatsby", author: "Fitzgerald", price: 10000, grade: "10-р анги", subject: "Уран зохиол", year: "2024", image: "img/the-great-gatsby.webp" }
-];
+import { db, storage } from './firebase-config.js';
+import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+let allBooks = [];
+
+window.showHome = showHome;
+window.addNewBook = addNewBook;
+
+async function loadBooksFromDatabase() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "books"));
+        // Clear the array and fill it with fresh data
+        allBooks = [];
+        querySnapshot.forEach((doc) => {
+            allBooks.push({ id: doc.id, ...doc.data() });
+        });
+        
+        console.log("Books loaded from Firebase:", allBooks); // Check your console for this!
+        
+        // 2. Immediately call display with the full list
+        displayBooks(allBooks); 
+    } catch (error) {
+        console.error("Error fetching books:", error);
+        bookGrid.innerHTML = `<p class="no-results">Error connecting to database.</p>`;
+    }
+}
 
 let recentlyViewed = [];
 
@@ -19,22 +40,30 @@ function displayBooks(filteredBooks) {
     bookGrid.innerHTML = '';
 
     if (filteredBooks.length === 0) {
-        bookGrid.innerHTML = `<p class="no-results">No books found for your criteria.</p>`;
+        bookGrid.innerHTML = `<p class="no-results">Хайлтад тохирох ном олдсонгүй.</p>`;
         return;
     }
 
     filteredBooks.forEach(book => {
+        // Add || "..." to handle any missing data gracefully
+        const title = book.title || "Гарчиггүй";
+        const price = book.price || -404;
+        const grade = book.grade || "Хоосон";
+        const subject = book.subject || "Хоосон";
+        const year = book.year || "----";
+        const image = book.image || "img/no-img.png";
+
         const card = `
         <a href="product.html?id=${book.id}" class="book-card-link">
             <div class="book-card">
-                <div class="book-image"><img src="${book.image}" alt="${book.title}"></div>
+                <div class="book-image"><img src="${image}" alt="${title}"></div>
                 <div class="book-info">
                     <div class="price-row">
-                        <span class="price">₮${book.price}</span>
+                        <span class="price">₮${price.toLocaleString()}</span>
                     </div>
-                    <h3>${book.title}</h3>
-                    <p class="meta">${book.grade} | ${book.subject}</p>
-                    <p class="year">Хэвлэгдсэн: <span>${book.year} он</span></p>
+                    <h3>${title}</h3>
+                    <p class="meta">${grade} | ${subject}</p>
+                    <p class="year">Хэвлэгдсэн: <span>${year}он</span></p>
                 </div>
             </div>
         </a>
@@ -109,39 +138,75 @@ function applyFilters() {
     const selectedGrade = gradeFilter.value;
     const selectedSubject = subjectFilter.value;
 
-    const filtered = books.filter(book => {
-        const matchesSearch = book.title.toLowerCase().includes(searchTerm) || book.code.toLowerCase().includes(searchTerm);
+    const filtered = allBooks.filter(book => {
+        // Add fallbacks (|| "") in case some data fields are missing in Firebase
+        const title = (book.title || "").toLowerCase();
+        const code = (book.code || "").toLowerCase();
+        
+        const matchesSearch = title.includes(searchTerm) || code.includes(searchTerm);
         const matchesGrade = selectedGrade === 'all' || book.grade === selectedGrade;
         const matchesSubject = selectedSubject === 'all' || book.subject === selectedSubject;
+        
         return matchesSearch && matchesGrade && matchesSubject;
     });
+
     displayBooks(filtered);
 }
 
 // 7. Sell Form Logic
-function addNewBook(event) {
-    event.preventDefault(); // Stop page refresh
+async function addNewBook(event) {
+    event.preventDefault();
+    
+    const file = document.getElementById('formImage').files[0];
+    const uploadContainer = document.getElementById('uploadContainer');
+    const progressBar = document.getElementById('progressBar');
+    const uploadStatus = document.getElementById('uploadStatus');
 
-    const newBook = {
-        id: books.length + 1,
-        title: document.getElementById('formTitle').value,
-        author: document.getElementById('formAuthor').value,
-        price: document.getElementById('formPrice').value,
-        grade: document.getElementById('formGrade').value,
-        subject: document.getElementById('formSubject').value,
-        code: document.getElementById('formCode').value,
-        year: document.getElementById('formYear').value,
-        image: "https://via.placeholder.com/150" // Default placeholder
-    };
+    if (!file) return alert("Please select an image!");
 
-    books.push(newBook);
-    displayBooks(books);
-    alert("Book listed successfully!");
-    // Close modal logic here if applicable
+    // Show the progress bar
+    uploadContainer.classList.remove('hidden');
+
+    const fileName = Date.now() + "-" + file.name;
+    const storageRef = ref(storage, 'books/' + fileName);
+    
+    // 1. Start Resumable Upload
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on('state_changed', 
+        (snapshot) => {
+            // 2. Calculate Progress Percentage
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            progressBar.style.width = progress + '%';
+            uploadStatus.innerText = `Uploading: ${Math.round(progress)}%`;
+        }, 
+        (error) => {
+            // Handle unsuccessful uploads
+            console.error("Upload failed", error);
+            alert("Upload failed! Try a smaller image.");
+        }, 
+        async () => {
+            // 3. Handle successful uploads on completion
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            
+            // Save to Firestore exactly like before
+            await addDoc(collection(db, "books"), {
+                title: document.getElementById('formTitle').value,
+                image: downloadURL,
+                // ... include all your other form fields here ...
+                createdAt: new Date()
+            });
+
+            alert("Book posted!");
+            location.reload(); 
+        }
+    );
 }
 
 // Initialize
-displayBooks(books);
-searchInput.addEventListener('input', applyFilters);
-gradeFilter.addEventListener('change', applyFilters);
-subjectFilter.addEventListener('change', applyFilters);
+document.addEventListener('DOMContentLoaded', () => {
+    loadBooksFromDatabase();
+    searchInput.addEventListener('input', applyFilters);
+    gradeFilter.addEventListener('change', applyFilters);
+    subjectFilter.addEventListener('change', applyFilters);
+});

@@ -1,15 +1,18 @@
-// firebase-config.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+// firebase-config.js - UPDATE THESE LINES
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+
+// ... the rest of your config ...
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "...",
-  appId: "..."
+  apiKey: "AIzaSyBo975fUWgxYJwGb2Ie4zIcxPb2-etH8ic",
+  authDomain: "used-book-shop.firebaseapp.com",
+  projectId: "used-book-shop",
+  storageBucket: "used-book-shop.firebasestorage.app",
+  messagingSenderId: "95397772472",
+  appId: "1:95397772472:web:2e70a9cd2e5e532f2e884d",
+  measurementId: "G-EEZ7CYSM1E"
 };
 
 const app = initializeApp(firebaseConfig);

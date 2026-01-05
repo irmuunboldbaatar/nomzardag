@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NomZardag | Student Marketplace</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
+    <script type="module" src="script.js" defer></script>
   </head>
   <body>
     <header class="hero">
@@ -26,7 +26,6 @@
     </header>
     <main class="container">
       
-
       <div id="sellModal" class="modal-overlay hidden">
         <div class="modal-content">
           <h2>List Your Book</h2>
@@ -38,11 +37,6 @@
               required
             />
             <input type="text" id="formAuthor" placeholder="Зохиогч"/>
-            <input
-              type="text"
-              id="formCode"
-              placeholder="Course Code (e.g. MATH101)"
-            />
             <input
               type="number"
               id="formPrice"
@@ -87,7 +81,20 @@
                 placeholder="Хэвлэгдсэн он"
                 required
               />
-              
+              <div class="form-group">
+                <label for="formImage">Upload Book Photo:</label>
+                <input type="file" id="formImage" accept="image/*" required>
+              </div>
+              <div id="imagePreview" class="hidden">
+                <img id="previewImg" src="" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">
+              </div>
+            </div>
+
+            <div id="uploadContainer" class="hidden" style="margin: 15px 0;">
+              <p id="uploadStatus" style="font-size: 0.8rem; margin-bottom: 5px;">Uploading: 0%</p>
+              <div class="progress-bar-bg" style="width: 100%; background: #e2e8f0; height: 10px; border-radius: 5px;">
+                <div id="progressBar" style="width: 0%; background: #4f46e5; height: 100%; border-radius: 5px; transition: width 0.3s;"></div>
+              </div>
             </div>
 
             <div class="form-actions">
