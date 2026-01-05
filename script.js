@@ -1,8 +1,8 @@
 // 1. Data Source
 const books = [
-    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45, grade: "Freshman", subject: "Economics", code: "ECON101", condition: "Good", image: "img/iPhone11.png" },
-    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80, grade: "Sophomore", subject: "Science", code: "BIO202", condition: "Like New", image: "https://via.placeholder.com/150" },
-    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60, grade: "Freshman", subject: "Math", code: "MATH150", condition: "Fair", image: "https://via.placeholder.com/150" },
+    { id: 1, title: "Principles of Economics", author: "Mankiw", price: 45, grade: "10-р анги", subject: "Иргэний боловсрол", code: "ECON101", condition: "Good", image: "img/Alfred_Marshall_-_Principles_of_Economics_(1890).jpeg" },
+    { id: 2, title: "Organic Chemistry", author: "Klein", price: 80, grade: "Sophomore", subject: "Хими", code: "BIO202", condition: "Like New", image: "https://via.placeholder.com/150" },
+    { id: 3, title: "Calculus: Early Transcendentals", author: "Stewart", price: 60, grade: "10-р анги", subject: "Math", code: "MATH150", condition: "Fair", image: "https://via.placeholder.com/150" },
     { id: 4, title: "The Great Gatsby", author: "Fitzgerald", price: 10, grade: "Junior", subject: "Literature", code: "LIT300", condition: "Excellent", image: "https://via.placeholder.com/150" }
 ];
 
@@ -29,14 +29,13 @@ function displayBooks(filteredBooks) {
                 <div class="badge">${book.code}</div>
                 <div class="book-image"><img src="${book.image}" alt="${book.title}"></div>
                 <div class="book-info">
+                    <div class="price-row">
+                        <span class="price">₮${book.price}</span>
+                    </div>
                     <h3>${book.title}</h3>
-                    <p class="author">${book.author}</p>
                     <p class="meta">${book.grade} | ${book.subject}</p>
                     <p class="condition">Condition: <span>${book.condition}</span></p>
-                    <div class="price-row">
-                        <span class="price">$${book.price}</span>
-                        <button class="buy-btn">View Details</button>
-                    </div>
+                    <button class="buy-btn">View Details</button>
                 </div>
             </div>
         `;

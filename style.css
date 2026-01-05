@@ -51,13 +51,14 @@ body {
 
 .book-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 2rem;
     padding-bottom: 5rem;
 }
 
 /* Book Cards */
 .book-card {
+    height: 500px;
     background: var(--card-bg);
     border-radius: 12px;
     overflow: hidden;
@@ -80,7 +81,19 @@ body {
     font-weight: bold;
 }
 
-.book-image { height: 200px; background-color: #ddd; }
+.book-image {
+    height: 250px;
+    background-color: #ddd; 
+}
+
+.book-image img {
+    width: 100%;
+    height: 100%;
+    /* This is the magic line */
+    object-fit: cover; 
+    /* Ensures the image stays centered */
+    object-position: center; 
+}
 
 .book-info { padding: 1.2rem; }
 .book-info h3 { margin: 0; font-size: 1.1rem; }
