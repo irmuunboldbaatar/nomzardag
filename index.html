@@ -3,9 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NomZardag | Student Marketplace</title>
+    <title>NomZardag | Хуучин номын худалдаа</title>
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
   </head>
   <body>
     <header class="hero">
@@ -28,7 +29,7 @@
       
       <div id="sellModal" class="modal-overlay hidden">
         <div class="modal-content">
-          <h2>List Your Book</h2>
+          <h2>Номны мэдээлэл оруулах</h2>
           <form onsubmit="addNewBook(event)">
             <input
               type="text"
@@ -73,8 +74,6 @@
                 <option value="Эрүүл мэнд">Эрүүл мэнд</option>
                 <option value="Бусад">Бусад</option>
               </select>
-
-              
               <input
                 type="number"
                 id="formYear"
@@ -82,8 +81,9 @@
                 required
               />
               <div class="form-group">
-                <label for="formImage">Upload Book Photo:</label>
-                <input type="file" id="formImage" accept="image/*" required>
+                <label for="formImage">Номны зураг:</label>
+                <input type="file" id="formImage" accept="image/*" onchange="previewFile()">
+                <img id="previewImg" src="" style="display:none; width:100px; margin-top:10px; border-radius:8px;">
               </div>
               <div id="imagePreview" class="hidden">
                 <img id="previewImg" src="" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">
@@ -98,13 +98,13 @@
             </div>
 
             <div class="form-actions">
-              <button type="submit" class="confirm-btn">Post Now</button>
+              <button type="submit" class="confirm-btn">Нийтлэх</button>
               <button
                 type="button"
                 class="cancel-btn"
                 onclick="document.getElementById('sellModal').classList.add('hidden')"
               >
-                Cancel
+                Болих
               </button>
             </div>
           </form>

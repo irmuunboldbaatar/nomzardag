@@ -59,7 +59,7 @@ function renderHistory(history) {
     grid.innerHTML = history.map(b => `
         <div class="mini-card">
             <a href="product.html?id=${b.id}">
-                <img src="${b.image}" width="100">
+                <img src="${b.image}" width="100px" class="mini-img">
                 <p>${b.title}</p>
             </a>
         </div>

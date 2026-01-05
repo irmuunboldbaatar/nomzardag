@@ -43,15 +43,13 @@ function displayBooks(filteredBooks) {
     bookGrid.innerHTML = '';
 
     if (filteredBooks.length === 0) {
-        bookGrid.innerHTML = `<p class="no-results">Хайлтад тохирох ном олдсонгүй.</p>`;
+        bookGrid.innerHTML = `<p class="no-results">No books found for your criteria.</p>`;
         return;
     }
 
-    // script.js
-
     filteredBooks.forEach(book => {
-        // Format the price with commas and the currency symbol
-        const formattedPrice = Number(book.price).toLocaleString();
+        // Currency Formatter: Adds commas (e.g., 45,000)
+        const formattedPrice = Number(book.price || 0).toLocaleString();
 
         const card = `
         <a href="product.html?id=${book.id}" class="book-card-link">
@@ -61,12 +59,10 @@ function displayBooks(filteredBooks) {
                     <div class="price-row">
                         <span class="price">₮${formattedPrice}</span>
                     </div>
-                    
-                    <h3>${book.title}</h3>
-                    
-                    <p class="meta">${book.grade} | ${book.subject}</p>
-                    
-                    <p class="year"><span>${book.year} он</span></p>
+
+                    <h3 class="truncate-title">${book.title}</h3>
+
+                    <p class="meta">${book.grade || '---'} | ${book.subject || '---'}</p>
                 </div>
             </div>
         </a>
@@ -160,55 +156,73 @@ function applyFilters() {
 async function addNewBook(event) {
     event.preventDefault();
     
-    const file = document.getElementById('formImage').files[0];
+    const fileInput = document.getElementById('formImage');
+    let file = fileInput.files[0];
     const uploadContainer = document.getElementById('uploadContainer');
     const progressBar = document.getElementById('progressBar');
     const uploadStatus = document.getElementById('uploadStatus');
 
-    if (!file) return alert("Please select an image!");
+    if (!file) return alert("Зураг сонгоно уу!");
 
-    // Show the progress bar
+    // 1. Show the UI immediately so the user knows something is happening
     uploadContainer.classList.remove('hidden');
+    uploadStatus.innerText = "Зургийг жижигсгэж байна..."; // "Reducing image..."
 
-    const fileName = Date.now() + "-" + file.name;
-    const storageRef = ref(storage, 'books/' + fileName);
-    
-    // 1. Start Resumable Upload
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on('state_changed', 
-        (snapshot) => {
-            // 2. Calculate Progress Percentage
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            progressBar.style.width = progress + '%';
-            uploadStatus.innerText = `Uploading: ${Math.round(progress)}%`;
-        }, 
-        (error) => {
-            // Handle unsuccessful uploads
-            console.error("Upload failed", error);
-            alert("Upload failed! Try a smaller image.");
-        }, 
-        async () => {
-            // 3. Handle successful uploads on completion
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            
-            // Save to Firestore exactly like before
-            // Inside addNewBook, make sure you include ALL of these:
-            await addDoc(collection(db, "books"), {
-                title: document.getElementById('formTitle').value,
-                author: document.getElementById('formAuthor').value,
-                price: Number(document.getElementById('formPrice').value),
-                grade: document.getElementById('formGrade').value,
-                subject: document.getElementById('formSubject').value,
-                year: document.getElementById('formYear').value, // This was missing in your screenshot!
-                image: downloadURL,
-                createdAt: new Date()
-            });
-
-            alert("Book posted!");
-            location.reload(); 
+    try {
+        // 2. COMPRESSION STEP (Wait for this to finish!)
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 800,
+            useWebWorker: true
+        };
+        
+        // Ensure imageCompression is available
+        if (typeof imageCompression !== 'undefined') {
+            file = await imageCompression(file, options);
         }
-    );
+
+        // 3. START FIREBASE UPLOAD
+        const fileName = Date.now() + "-" + file.name;
+        const storageRef = ref(storage, 'books/' + fileName);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                progressBar.style.width = progress + '%';
+                uploadStatus.innerText = `Уншиж байна: ${Math.round(progress)}%`;
+            }, 
+            (error) => {
+                console.error("Upload Error:", error);
+                alert("Алдаа гарлаа: " + error.message);
+            }, 
+            async () => {
+                // 4. GET URL AND SAVE DATA
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                
+                await addDoc(collection(db, "books"), {
+                    title: document.getElementById('formTitle').value,
+                    price: Number(document.getElementById('formPrice').value),
+                    grade: document.getElementById('formGrade').value,
+                    subject: document.getElementById('formSubject').value,
+                    image: downloadURL,
+                    createdAt: new Date()
+                });
+
+                // After the addDoc is successful
+                document.querySelector('form').reset();
+                document.getElementById('sellModal').classList.add('hidden');
+                uploadContainer.classList.add('hidden'); // Hide progress bar
+                loadBooksFromDatabase(); // Just refresh the list without reloading the whole page
+
+                alert("Амжилттай нэмэгдлээ!");
+                location.reload();
+            }
+        );
+    } catch (err) {
+        console.error("Process Error:", err);
+        uploadStatus.innerText = "Алдаа гарлаа.";
+    }
 }
 
 // Initialize
@@ -218,3 +232,20 @@ document.addEventListener('DOMContentLoaded', () => {
     gradeFilter.addEventListener('change', applyFilters);
     subjectFilter.addEventListener('change', applyFilters);
 });
+
+window.previewFile = function() {
+    const preview = document.getElementById('previewImg');
+    const file = document.getElementById('formImage').files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = function() {
+        preview.src = reader.result;
+        preview.style.display = "block";
+    }
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+};
+
+window.addNewBook = addNewBook;
