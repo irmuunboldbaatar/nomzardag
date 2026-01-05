@@ -130,6 +130,16 @@ body {
 
 .price { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
 
+p {
+    font-size: 0.8rem;
+    display: block;
+    margin-block-start: 0em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+
 .buy-btn {
     background: #f1f5f9;
     border: none;

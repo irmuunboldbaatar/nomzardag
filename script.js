@@ -66,7 +66,7 @@ function displayBooks(filteredBooks) {
                     
                     <p class="meta">${book.grade} | ${book.subject}</p>
                     
-                    <p class="year">Хэвлэгдсэн: <span>${book.year} он</span></p>
+                    <p class="year"><span>${book.year} он</span></p>
                 </div>
             </div>
         </a>
