@@ -1,0 +1,183 @@
+:root {
+    --primary: #4f46e5;
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --card-bg: #ffffff;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+}
+
+/* Navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.logo { font-weight: 800; font-size: 1.5rem; }
+.logo span { color: var(--primary); }
+
+.search-bar input {
+    padding: 0.6rem 1.5rem;
+    width: 300px;
+    border-radius: 20px;
+    border: 1px solid #cbd5e1;
+}
+
+.sell-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Hero Section */
+.hero { text-align: center; padding: 3rem 0; }
+.hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+/* Grid Layout */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding-bottom: 5rem;
+}
+
+/* Book Cards */
+.book-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.book-card:hover { transform: translateY(-5px); }
+
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(79, 70, 229, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.book-image { height: 200px; background-color: #ddd; }
+
+.book-info { padding: 1.2rem; }
+.book-info h3 { margin: 0; font-size: 1.1rem; }
+.author { font-size: 0.9rem; color: #64748b; margin: 5px 0; }
+.condition { font-size: 0.85rem; margin: 10px 0; }
+.condition span { font-weight: bold; color: #059669; }
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.price { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+
+.buy-btn {
+    background: #f1f5f9;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.filter-section {
+    background: #fff;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+}
+
+.filter-section .container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.9rem;
+    background: white;
+    cursor: pointer;
+}
+
+.meta {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 4px 0;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #64748b;
+    padding: 4rem;
+}
+
+.hidden { display: none !important; }
+
+.product-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.main-img { height: 400px; background: #e2e8f0; border-radius: 12px; }
+.thumbnail-row { display: flex; gap: 10px; margin-top: 10px; }
+.thumb { width: 60px; height: 60px; background: #cbd5e1; border-radius: 4px; }
+
+.price-tag { font-size: 2rem; font-weight: bold; color: #4f46e5; margin: 1rem 0; }
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 20px 0;
+    border-top: 1px solid #e2e8f0;
+}
+
+.extra-list { margin-top: 60px; }
+.mini-grid { display: flex; gap: 20px; overflow-x: auto; padding: 10px 0; }
+
+.mini-card {
+    min-width: 150px;
+    cursor: pointer;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.mini-img { height: 120px; background: #f1f5f9; margin-bottom: 8px; border-radius: 4px; }
+.mini-card p { font-size: 0.8rem; font-weight: bold; margin: 0; }

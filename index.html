@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NomZardag | Student Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo" onclick="showHome()" style="cursor:pointer">Nom<span>Zardag</span></div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search by Course Code or Title...">
+        </div>
+        <button class="sell-btn" onclick="document.getElementById('sellModal').classList.remove('hidden')">+ Зар нэмэх</button>
+    </nav>
+
+    <main class="container">
+        
+        <header class="hero">
+            <h1>Books for Students, by Students.</h1>
+            <p>Find your textbooks for the next semester at half the price.</p>
+        </header>
+
+        <div id="sellModal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h2>List Your Book</h2>
+                <form onsubmit="addNewBook(event)">
+                    <input type="text" id="formTitle" placeholder="Book Title" required>
+                    <input type="text" id="formAuthor" placeholder="Author" required>
+                    <input type="text" id="formCode" placeholder="Course Code (e.g. MATH101)" required>
+                    <input type="number" id="formPrice" placeholder="Price ($)" required>
+                    
+                    <div class="select-group">
+                        <select id="formGrade">
+                            <option value="Freshman">Freshman</option>
+                            <option value="Sophomore">Sophomore</option>
+                            <option value="Junior">Junior</option>
+                            <option value="Senior">Senior</option>
+                        </select>
+                        
+                        <select id="formSubject">
+                            <option value="Англи хэл">Англи хэл</option>
+                            <option value="Дизайн технологи">Дизайн технологи</option>
+                            <option value="Иргэний боловсрол">Иргэний боловсрол</option>
+                            <option value="Математик">Математик</option>
+                            <option value="Мэдээллийн технологи">Мэдээллийн технологи</option>
+                            <option value="Орос хэл">Орос хэл</option>
+                            <option value="Үндэсний бичиг">Үндэсний бичиг</option>
+                            <option value="Үндэсний бичиг">Үндэсний бичиг</option>
+                            <option value="Эрүүл мэнд">Эрүүл мэнд</option>
+                            <option value="Бусад">Бусад</option>
+                        </select>
+
+                        <select id="formCondition">
+                            <option value="Like New">Like New</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="confirm-btn">Post Now</button>
+                        <button type="button" class="cancel-btn" onclick="document.getElementById('sellModal').classList.add('hidden')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-container">
+                <select id="gradeFilter">
+                    <option value="all">Бүх анги</option>
+                    <option value="10-р анги">10-р анги</option>
+                    <option value="11-р анги">11-р анги</option>
+                    <option value="12-р анги">12-р анги</option>
+                </select>
+
+                <select id="subjectFilter">
+                    <option value="all">Бүх хичээл</option>
+                    <option value="Англи хэл">Англи хэл</option>
+                    <option value="Дизайн технологи">Дизайн технологи</option>
+                    <option value="Иргэний боловсрол">Иргэний боловсрол</option>
+                    <option value="Математик">Математик</option>
+                    <option value="Мэдээллийн технологи">Мэдээллийн технологи</option>
+                    <option value="Орос хэл">Орос хэл</option>
+                    <option value="Үндэсний бичиг">Үндэсний бичиг</option>
+                    <option value="Үндэсний бичиг">Үндэсний бичиг</option>
+                    <option value="Эрүүл мэнд">Эрүүл мэнд</option>
+                    <option value="Бусад">Бусад</option>
+                </select>
+            </div>
+        </div>
+
+        <section class="book-grid" id="bookGrid">
+            </section>
+
+        <section id="detailPage" class="hidden">
+            <button class="back-btn" onclick="showHome()">← Back to Search</button>
+            
+            <div class="product-container">
+                <div class="product-images">
+                    <div class="main-img" id="detailImg"></div>
+                    <div class="thumbnail-row">
+                        <div class="thumb active"></div>
+                        <div class="thumb"></div>
+                        <div class="thumb"></div>
+                    </div>
+                </div>
+                
+                <div class="product-specs">
+                    <h1 id="detailTitle"></h1>
+                    <p id="detailAuthor" class="author-label"></p>
+                    <div class="price-tag" id="detailPrice"></div>
+                    
+                    <div class="detail-grid">
+                        <div class="spec-item"><strong>Course</strong><span id="detailCode"></span></div>
+                        <div class="spec-item"><strong>Grade</strong><span id="detailGrade"></span></div>
+                        <div class="spec-item"><strong>Condition</strong><span id="detailCondition"></span></div>
+                    </div>
+                    
+                    <div class="description-box">
+                        <h3>Seller's Note</h3>
+                        <p>This book was used for one semester. No missing pages, slight highlighting in some chapters. Great condition for the price!</p>
+                    </div>
+                    
+                    <button class="buy-btn large" onclick="contactSeller()">Message Seller</button>
+                </div>
+            </div>
+
+            <hr class="divider">
+            <div class="extra-list">
+                <h3>Similar Books for your Course</h3>
+                <div class="mini-grid" id="suggestedGrid"></div>
+            </div>
+
+            <div class="extra-list">
+                <h3>Recently Viewed</h3>
+                <div class="mini-grid" id="historyGrid"></div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
