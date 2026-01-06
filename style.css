@@ -92,7 +92,7 @@ body {
 }
 
 .book-card {
-    height: 380px; /* Standardized height for all cards */
+    height: 370px; /* Standardized height for all cards */
     display: flex;
     flex-direction: column;
     background: var(--card-bg);
@@ -251,4 +251,27 @@ a {
     text-overflow: ellipsis;
     
     min-height: 2.6em; /* Keeps height consistent even for 1-line titles */
+}
+
+.owner-controls {
+    padding: 10px;
+    background: #fff1f2; /* Light red background */
+    border-top: 1px solid #fecaca;
+    display: flex;
+    justify-content: center;
+}
+
+.delete-btn {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.delete-btn:hover {
+    background-color: #dc2626;
 }

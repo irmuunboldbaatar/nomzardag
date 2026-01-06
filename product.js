@@ -31,8 +31,19 @@ async function loadProductDetails() {
                 </div>
             </div>
         `;
+        const sellerDoc = await getDoc(doc(db, "users", book.sellerId));
+        const seller = sellerDoc.data();
+
+        const contactHTML = `
+        <div class="contact-section">
+            <h3>Contact Seller</h3>
+            <a href="tel:${seller.phone}" class="contact-btn phone">📞 Call: ${seller.phone}</a>
+            ${seller.fb ? `<a href="${seller.fb}" target="_blank" class="contact-btn fb">Facebook</a>` : ''}
+            ${seller.ig ? `<a href="https://instagram.com/${seller.ig}" target="_blank" class="contact-btn ig">Instagram</a>` : ''}
+        </div>
+    `;
         // Handle history
-        updateHistory({id: bookId, ...book});
+        updateHistory({ id: bookId, ...book });
     } else {
         document.getElementById('product-detail-content').innerHTML = "<h2>Ном олдсонгүй.</h2>";
     }
@@ -48,8 +59,8 @@ function updateHistory(book) {
     // Remove if already exists, then add to front
     history = history.filter(item => item.id !== book.id);
     history.unshift(book);
-    if(history.length > 4) history.pop();
-    
+    if (history.length > 4) history.pop();
+
     localStorage.setItem('recentBooks', JSON.stringify(history));
     renderHistory(history);
 }

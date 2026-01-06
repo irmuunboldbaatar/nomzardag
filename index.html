@@ -23,6 +23,60 @@
         >
           + Зар нэмэх
         </button>
+
+        <button id="authBtn" class="sell-btn" onclick="openAuthModal()">
+          Login
+        </button>
+
+        <div id="authModal" class="modal-overlay hidden">
+          <div class="modal-content">
+            <h2 id="authTitle">Sign Up</h2>
+            <form onsubmit="handleAuth(event)">
+              <input
+                type="email"
+                id="authEmail"
+                placeholder="School Email"
+                required
+              />
+              <input
+                type="password"
+                id="authPassword"
+                placeholder="Password"
+                required
+              />
+
+              <div id="signupFields">
+                <input type="text" id="userName" placeholder="Full Name" />
+                <input
+                  type="text"
+                  id="userPhone"
+                  placeholder="Phone Number (Required)"
+                  required
+                />
+                <input
+                  type="text"
+                  id="userFB"
+                  placeholder="Facebook Profile Link"
+                />
+                <input
+                  type="text"
+                  id="userIG"
+                  placeholder="Instagram Username"
+                />
+              </div>
+
+              <button type="submit" class="sell-btn">Continue</button>
+              <p
+                id="toggleText"
+                onclick="toggleAuthMode()"
+                style="cursor: pointer; font-size: 0.8rem; margin-top: 10px"
+              >
+                Already have an account? Login
+              </p>
+            </form>
+            <button class="close-btn" onclick="closeAuthModal()">Close</button>
+          </div>
+        </div>
       </nav>
     </header>
     <main class="container">

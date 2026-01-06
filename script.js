@@ -1,7 +1,124 @@
 // 1. Data Source
-import { db, storage } from './firebase-config.js';
-import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
-import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+import { auth, db, storage } from './firebase-config.js'; //
+import { 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    onAuthStateChanged, 
+    signOut 
+} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"; //
+
+import {
+    ref,
+    uploadBytesResumable,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js"; //
+
+import {
+    collection,
+    addDoc, 
+    getDocs, 
+    doc, 
+    getDoc, 
+    setDoc, 
+    deleteDoc,
+} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"; //
+let isSignUp = true;
+let currentUserProfile = null;
+
+onAuthStateChanged(auth, async (user) => {
+    const authBtn = document.getElementById('authBtn');
+    const sellBtn = document.querySelector('.sell-btn[onclick*="sellModal"]');
+
+    if (user) {
+        // User is logged in
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        currentUserProfile = userDoc.data();
+        authBtn.innerText = "Profile / Logout";
+        authBtn.onclick = handleLogout;
+        sellBtn.style.display = "block"; // Only show sell button when logged in
+    } else {
+        // User is logged out
+        currentUserProfile = null;
+        authBtn.innerText = "Login";
+        authBtn.onclick = openAuthModal;
+        sellBtn.style.display = "none"; 
+    }
+});
+
+async function handleAuth(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+
+    // Basic validation to prevent 400 errors
+    if (password.length < 6) {
+        alert("Нууц үг хамгийн багадаа 6 тэмдэгт байх ёстой.");
+        return;
+    }
+
+    try {
+        if (isSignUp) {
+            // --- SIGN UP LOGIC ---
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+
+            const res = await createUserWithEmailAndPassword(auth, email, password);
+            
+            // Save Profile Info to Firestore
+            await setDoc(doc(db, "users", res.user.uid), {
+                name: document.getElementById('userName').value || "",
+                phone: document.getElementById('userPhone').value || "",
+                fb: document.getElementById('userFB').value.trim() || "",
+                ig: document.getElementById('userIG').value.trim() || "",
+                uid: res.user.uid,
+                createdAt: new Date()
+            });
+            
+            if (!phone) {
+                alert("Утасны дугаар заавал шаардлагатай!");
+                return;
+            }
+
+            alert("Амжилттай бүртгүүллээ!");
+        } else {
+            // --- LOGIN LOGIC ---
+            await signInWithEmailAndPassword(auth, email, password);
+            alert("Амжилттай нэвтэрлээ!");
+        }
+        closeAuthModal();
+    } catch (err) {
+        console.error("Auth Error Code:", err.code);
+        // Handle common Firebase 400 errors
+        if (err.code === 'auth/invalid-email') alert("И-мэйл хаяг буруу байна.");
+        else if (err.code === 'auth/email-already-in-use') alert("Энэ и-мэйл аль хэдийн бүртгэгдсэн байна.");
+        else if (err.code === 'auth/wrong-password') alert("Нууц үг буруу байна.");
+        else alert("Алдаа: " + err.message);
+    }
+}
+
+async function deleteBook(bookId) {
+    // 1. Double check with the user
+    const confirmDelete = confirm("Та энэ номыг устгахдаа итгэлтэй байна уу? (Зарагдсан бол устгана уу)");
+    
+    if (confirmDelete) {
+        try {
+            // 2. Remove from Firestore
+            await deleteDoc(doc(db, "books", bookId));
+            
+            alert("Амжилттай устгагдлаа!");
+            
+            // 3. Refresh the UI
+            location.reload(); 
+        } catch (error) {
+            console.error("Устгахад алдаа гарлаа:", error);
+            alert("Танд энэ номыг устгах эрх байхгүй байна.");
+        }
+    }
+}
+
+// Make it global so the button can see it
+window.deleteBook = deleteBook;
 
 let allBooks = [];
 
@@ -12,16 +129,13 @@ async function loadBooksFromDatabase() {
     try {
         const querySnapshot = await getDocs(collection(db, "books"));
         
-        // ADD THIS LINE:
         const booksArray = []; 
         
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            console.log("Document ID:", doc.id, "Data:", data);
             booksArray.push({ id: doc.id, ...data });
         });
         
-        // Update your global allBooks and display them
         allBooks = booksArray;
         displayBooks(allBooks);
         
@@ -42,6 +156,8 @@ const subjectFilter = document.getElementById('subjectFilter');
 function displayBooks(filteredBooks) {
     bookGrid.innerHTML = '';
 
+    const user = auth.currentUser;
+
     if (filteredBooks.length === 0) {
         bookGrid.innerHTML = `<p class="no-results">No books found for your criteria.</p>`;
         return;
@@ -50,6 +166,7 @@ function displayBooks(filteredBooks) {
     filteredBooks.forEach(book => {
         // Currency Formatter: Adds commas (e.g., 45,000)
         const formattedPrice = Number(book.price || 0).toLocaleString();
+        const isOwner = user && book.sellerId === user.uid;
 
         const card = `
         <a href="product.html?id=${book.id}" class="book-card-link">
@@ -59,11 +176,15 @@ function displayBooks(filteredBooks) {
                     <div class="price-row">
                         <span class="price">₮${formattedPrice}</span>
                     </div>
-
                     <h3 class="truncate-title">${book.title}</h3>
-
+                    <p class="meta">${book.year || '---'}</p>
                     <p class="meta">${book.grade || '---'} | ${book.subject || '---'}</p>
                 </div>
+                ${isOwner ? `
+                    <div class="owner-controls">
+                        <button onclick="deleteBook('${book.id}')" class="delete-btn">Delete</button>
+                    </div>
+                ` : ''}
             </div>
         </a>
         `;
@@ -175,6 +296,7 @@ async function addNewBook(event) {
                     grade: document.getElementById('formGrade').value,
                     subject: document.getElementById('formSubject').value,
                     image: downloadURL,
+                    sellerId: auth.currentUser.uid,
                     createdAt: new Date()
                 });
 
@@ -218,3 +340,43 @@ window.previewFile = function() {
 };
 
 window.addNewBook = addNewBook;
+
+// Add these at the very end of script.js
+window.openAuthModal = () => {
+    isSignUp = false; // Default to login
+    document.getElementById('authTitle').innerText = "Login";
+    document.getElementById('signupFields').classList.add('hidden');
+    document.getElementById('toggleText').innerText = "Don't have an account? Sign Up";
+    document.getElementById('authModal').classList.remove('hidden');
+};
+
+window.closeAuthModal = () => {
+    document.getElementById('authModal').classList.add('hidden');
+};
+
+window.toggleAuthMode = () => {
+    isSignUp = !isSignUp;
+    const signupFields = document.getElementById('signupFields');
+    const userPhone = document.getElementById('userPhone');
+    const authTitle = document.getElementById('authTitle');
+    const toggleText = document.getElementById('toggleText');
+
+    authTitle.innerText = isSignUp ? "Sign Up" : "Login";
+    toggleText.innerText = isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up";
+    
+    if (isSignUp) {
+        signupFields.classList.remove('hidden');
+        userPhone.setAttribute('required', ''); // Required for Sign Up
+    } else {
+        signupFields.classList.add('hidden');
+        userPhone.removeAttribute('required'); // NOT required for Login
+    }
+};
+
+window.handleLogout = () => {
+    signOut(auth).then(() => {
+        location.reload();
+    });
+};
+
+window.handleAuth = handleAuth;
