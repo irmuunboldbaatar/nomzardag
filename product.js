@@ -20,7 +20,6 @@ async function loadProductDetails() {
                 </div>
                 <div class="product-specs">
                     <h1>${book.title || "Мэдээлэлгүй"}</h1>
-                    <p class="author">Зохиогч: ${book.author || 'Тодорхойгүй'}</p>
                     <div class="price-tag">${book.price || 0}₮</div>
                     <div class="detail-grid">
                         <div class="spec-item"><strong>Анги:</strong> ${book.grade}</div>

@@ -210,7 +210,7 @@ select {
 }
 
 .extra-list { margin-top: 60px; }
-.mini-grid { display: flex; gap: 20px; overflow-x: auto; padding: 10px 0; }
+.mini-grid { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; }
 
 .mini-card {
     width: 100px;
